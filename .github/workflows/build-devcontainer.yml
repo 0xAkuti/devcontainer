@@ -1,0 +1,38 @@
+name: Build Dev Container
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.devcontainer/**'
+      - 'Dockerfile'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.devcontainer/**'
+      - 'Dockerfile'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get devcontainer folder name
+        id: get-folder
+        run: |
+          FOLDER_NAME=$(basename $(find .devcontainer -maxdepth 1 -type d | head -n 1))
+          echo "folder_name=$FOLDER_NAME" >> $GITHUB_OUTPUT
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ${{ github.repository }}-${{ steps.get-folder.outputs.folder_name }}
+          cacheFrom: ${{ github.repository }}-${{ steps.get-folder.outputs.folder_name }}
+          push: ${{ github.event_name != 'pull_request' }}
+          # Optional: Add any additional build arguments or configuration here
+          # buildArgs: |
+          #   ARG1=value1
+          #   ARG2=value2 
