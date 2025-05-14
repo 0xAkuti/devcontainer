@@ -53,5 +53,7 @@ jobs:
           subFolder: ${{ matrix.devcontainer_path }}
           imageName: ghcr.io/${{ steps.string_ops.outputs.lowercase_repo }}/${{ matrix.devcontainer_path }}
           cacheFrom: ghcr.io/${{ steps.string_ops.outputs.lowercase_repo }}/${{ matrix.devcontainer_path }}
-          eventFilterForPush: push, workflow_dispatch
+          eventFilterForPush: |
+            push
+            workflow_dispatch
           
