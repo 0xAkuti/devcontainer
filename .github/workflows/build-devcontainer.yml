@@ -48,8 +48,3 @@ jobs:
           imageName: ${{ github.repository }}-${{ matrix.devcontainer_path }}
           subFolder: ${{ matrix.devcontainer_path }}
           cacheFrom: ${{ github.repository }}-${{ matrix.devcontainer_path }}
-          push: ${{ github.event_name != 'pull_request' }}
-          # Optional: Add any additional build arguments or configuration here
-          # buildArgs: |
-          #   ARG1=value1
-          #   ARG2=value2 
