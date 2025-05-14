@@ -14,26 +14,40 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  list-devcontainers:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Find devcontainer directories
+        id: set-matrix
+        run: |
+          # Find directories containing .devcontainer and format for matrix
+          # This will find directories like 'base-debian', 'another-container'
+          # and create a JSON array like ["base-debian", "another-container"]
+          paths=$(find . -path '*/.devcontainer' -printf '%h\n' | sed 's|./||' | jq -Rsc 'split("\n")[:-1]')
+          echo "matrix=$paths" >> $GITHUB_OUTPUT
+          echo "Found devcontainer paths: $paths"
+
+  build:
+    needs: list-devcontainers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        devcontainer_path: ${{fromJson(needs.list-devcontainers.outputs.matrix)}}
+      fail-fast: false # Continue building other devcontainers if one fails
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Find devcontainer directories
-        id: find
+      - name: Build dev container for ${{ matrix.devcontainer_path }}
         uses: devcontainers/ci@v0.3
         with:
-          command: find
-          findPath: .
-          findPattern: .devcontainer
-
-      - name: Build dev containers
-        uses: devcontainers/ci@v0.3
-        with:
-          command: build
-          imageName: ${{ github.repository }}-${{ steps.find.outputs.path }}
-          cacheFrom: ${{ github.repository }}-${{ steps.find.outputs.path }}
+          imageName: ${{ github.repository }}-${{ matrix.devcontainer_path }}
+          subFolder: ${{ matrix.devcontainer_path }}
+          cacheFrom: ${{ github.repository }}-${{ matrix.devcontainer_path }}
           push: ${{ github.event_name != 'pull_request' }}
           # Optional: Add any additional build arguments or configuration here
           # buildArgs: |
