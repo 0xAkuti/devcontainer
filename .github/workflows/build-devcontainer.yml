@@ -1,16 +1,16 @@
-name: Build Dev Container
+name: Build Dev Containers
 
 on:
   push:
     branches: [ main ]
     paths:
-      - '.devcontainer/**'
-      - 'Dockerfile'
+      - '**/.devcontainer/**'
+      - '**/Dockerfile'
   pull_request:
     branches: [ main ]
     paths:
-      - '.devcontainer/**'
-      - 'Dockerfile'
+      - '**/.devcontainer/**'
+      - '**/Dockerfile'
   workflow_dispatch:
 
 jobs:
@@ -20,17 +20,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get devcontainer folder name
-        id: get-folder
-        run: |
-          FOLDER_NAME=$(basename $(find .devcontainer -maxdepth 1 -type d | head -n 1))
-          echo "folder_name=$FOLDER_NAME" >> $GITHUB_OUTPUT
-
-      - name: Pre-build dev container image
+      - name: Find devcontainer directories
+        id: find
         uses: devcontainers/ci@v0.3
         with:
-          imageName: ${{ github.repository }}-${{ steps.get-folder.outputs.folder_name }}
-          cacheFrom: ${{ github.repository }}-${{ steps.get-folder.outputs.folder_name }}
+          command: find
+          findPath: .
+          findPattern: .devcontainer
+
+      - name: Build dev containers
+        uses: devcontainers/ci@v0.3
+        with:
+          command: build
+          imageName: ${{ github.repository }}-${{ steps.find.outputs.path }}
+          cacheFrom: ${{ github.repository }}-${{ steps.find.outputs.path }}
           push: ${{ github.event_name != 'pull_request' }}
           # Optional: Add any additional build arguments or configuration here
           # buildArgs: |
