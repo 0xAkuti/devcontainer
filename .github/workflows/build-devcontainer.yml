@@ -45,7 +45,8 @@ jobs:
       - name: Build dev container for ${{ matrix.devcontainer_path }}
         uses: devcontainers/ci@v0.3
         with:
-          imageName: ${{ github.repository }}-${{ matrix.devcontainer_path }}
           subFolder: ${{ matrix.devcontainer_path }}
-          cacheFrom: ${{ github.repository }}-${{ matrix.devcontainer_path }}
-          eventFilterForPush:
+          imageName: ghcr.io/${{ github.repository }}/${{ matrix.devcontainer_path }}
+          cacheFrom: ghcr.io/${{ github.repository }}/${{ matrix.devcontainer_path }}
+          eventFilterForPush: push, workflow_dispatch
+          
