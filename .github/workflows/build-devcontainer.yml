@@ -2,12 +2,12 @@ name: Build Dev Containers
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - '**/.devcontainer/**'
       - '**/Dockerfile'
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - '**/.devcontainer/**'
       - '**/Dockerfile'
