@@ -1,7 +1,8 @@
 {
   // based on https://github.com/theredguild/devcontainer
+  // Updated to use Debian (13) Trixie
   // For format details, see https://aka.ms/devcontainer.json.
-  "name": "Akuti's DevContainer",
+  "name": "Akuti's Smart Contract DevContainer",
 
   // You can use image or directly use a Dockerfile or Docker Compose file.
   // More info: https://containers.dev/guide/dockerfile
