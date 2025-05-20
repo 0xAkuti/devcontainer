@@ -18,7 +18,10 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest",
-      "moby": true
+      // set to false since trxie is currently not supported by moby
+      // which means we will use the hosts docker daemon instead of nested containers
+      // be aware of the security implications of this
+      "moby": false 
     }
     },
 
