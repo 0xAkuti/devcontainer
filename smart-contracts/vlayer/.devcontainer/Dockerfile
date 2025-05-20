@@ -12,8 +12,8 @@ WORKDIR /home/vscode
 SHELL ["/usr/bin/zsh", "-ic"]
 
 # Install vLayer
-RUN curl -SL https://install.vlayer.xyz | bash && \
-    vlayerup
+RUN curl -SL https://install.vlayer.xyz | bash
+RUN vlayerup
 
 # Install bun
 RUN curl -fsSL https://bun.sh/install | bash
