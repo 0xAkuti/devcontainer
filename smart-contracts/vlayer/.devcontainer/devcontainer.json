@@ -38,9 +38,9 @@
 
 
 // Configure tool-specific properties.
-  "customizations": {}
+  "customizations": {},
 // Use 'postCreateCommand' to run commands after the container is created.
-// "postCreateCommand": ""
+  "postCreateCommand": "if [ -f /etc/os-release.bak ]; then sudo mv /etc/os-release.bak /etc/os-release && echo 'INFO: Reverted /etc/os-release to original.'; else echo 'INFO: /etc/os-release.bak not found, no reversion needed.'; fi"
 // Use 'postAttachCommand' to attach a command after the container is opened.
   // "postAttachCommand": "zsh"
 }
