@@ -1,0 +1,43 @@
+{
+  // based on https://github.com/theredguild/devcontainer
+  // For format details, see https://aka.ms/devcontainer.json.
+  "name": "Akuti's vlayer DevContainer",
+
+  // You can use image or directly use a Dockerfile or Docker Compose file.
+  // More info: https://containers.dev/guide/dockerfile
+  // https://github.com/devcontainers/images/tree/main/src/base-alpine
+  // "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "build": {
+    "dockerfile": "./Dockerfile"
+  },
+
+  // In this case this is redundant, because we are using the default user.
+  "remoteUser": "vscode",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    }
+    },
+
+  // Mount isolation. If you need to extract something from within the container, you can use docker cp, but use it at your own risk. If you want to develop your devcontainer, you should comment this things, otherwise your changes inside the live container won't persist.
+  // Disables mounting the host workspace into the container.
+  "workspaceMount": "type=tmpfs,destination=/workspace",
+  // Sets a workspace path entirely isolated within the container
+  "workspaceFolder": "/home/vscode/workspace",
+  "runArgs": [],
+
+  // Writable mounts in case you want to set --read-only above.
+  "mounts": [
+    ],
+
+
+// Configure tool-specific properties.
+  "customizations": {}
+// Use 'postCreateCommand' to run commands after the container is created.
+// "postCreateCommand": ""
+// Use 'postAttachCommand' to attach a command after the container is opened.
+  // "postAttachCommand": "zsh"
+}
